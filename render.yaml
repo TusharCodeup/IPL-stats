@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ipl-win-backend
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r backend/requirements/base.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./ipl_prediction.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+      - key: UPI_ID
+        value: 8122061903@axl
+      - key: UPI_PAYEE_NAME
+        value: Tushar Kumar Tiwari

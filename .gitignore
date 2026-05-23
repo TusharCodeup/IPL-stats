@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.env
+*.db
+
+# ML / Data
+backend/app/datasets/
+backend/app/models/*.joblib
+backend/app/models/*.json
+mlruns/
+backend/logs/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vercel/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+.cache/
