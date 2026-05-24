@@ -42,7 +42,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
   return (
     <>
       <nav className="border-b border-slate-200/80 dark:border-gray-800/80 bg-white/80 dark:bg-[#0e1322]/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] w-full mx-auto px-2 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Brand */}
           <div className="flex items-center space-x-3 shrink-0">
@@ -66,7 +66,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
                 <button
                   key={item.id}
                   onClick={() => setActivePage(item.id)}
-                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 border cursor-pointer ${
+                  className={`flex items-center space-x-1.5 px-2.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 border cursor-pointer shrink-0 ${
                     isActive
                       ? 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/25'
                       : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 dark:hover:text-gray-200 border-transparent'
@@ -88,7 +88,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
           </button>
 
           {/* User Profile / theme / Logout */}
-          <div className="flex items-center space-x-1.5 md:space-x-3 shrink-0">
+          <div className="flex items-center space-x-1.5 md:space-x-2 shrink-0">
             {/* Credits Remaining Badge */}
             <div 
               onClick={() => setActivePage('settings')}
