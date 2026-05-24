@@ -118,7 +118,7 @@ function App() {
       case 'teams':
         return <TeamShowcase />;
       case 'players':
-        return <PlayerSpotlight />;
+        return <PlayerSpotlight setActivePage={setActivePage} />;
       case 'points':
         return <PointsTable />;
       case 'schedule':

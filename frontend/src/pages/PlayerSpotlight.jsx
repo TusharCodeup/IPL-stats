@@ -27,7 +27,7 @@ const StatBar = ({ value, max, color, label, delay = 0 }) => (
   </div>
 );
 
-const PlayerSpotlight = () => {
+const PlayerSpotlight = ({ setActivePage }) => {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
   const [compare, setCompare] = useState([]); // [player1, player2]
@@ -91,6 +91,14 @@ const PlayerSpotlight = () => {
           <p className="text-gray-500 dark:text-gray-400 mt-3 text-sm max-w-lg mx-auto">
             The greatest IPL legends — stats, records, and head-to-head comparisons.
           </p>
+          {setActivePage && (
+            <button
+              onClick={() => setActivePage('teams')}
+              className="mt-6 px-6 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-emerald-400 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 font-bold transition-all"
+            >
+              View Franchise Teams →
+            </button>
+          )}
         </div>
       </FadeIn>
 
