@@ -88,7 +88,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
           </button>
 
           {/* User Profile / theme / Logout */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1.5 md:space-x-3 shrink-0">
             {/* Credits Remaining Badge */}
             <div 
               onClick={() => setActivePage('settings')}
@@ -107,18 +107,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
               {theme === 'dark' ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
             </button>
 
-            {/* Settings Button */}
-            <button
-              onClick={() => setActivePage('settings')}
-              title="Account Settings & Billing"
-              className={`p-2.5 rounded-xl border hover:bg-slate-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-cyan-400 transition-colors ${
-                activePage === 'settings' 
-                  ? 'bg-indigo-500/10 text-indigo-600 border-indigo-500/25 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/25'
-                  : 'border-slate-200 dark:border-gray-800'
-              }`}
-            >
-              <Settings className="w-4.5 h-4.5" />
-            </button>
+
 
             {/* Profile badge */}
             <div 
