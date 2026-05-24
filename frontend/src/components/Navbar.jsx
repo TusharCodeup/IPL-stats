@@ -28,11 +28,11 @@ const Navbar = memo(({ activePage, setActivePage }) => {
 
   const navItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
-    { id: 'live', name: 'Live Sim', icon: Tv2 },
+    { id: 'live', name: 'Live', icon: Tv2 },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
-    { id: 'legends', name: 'IPL Legends', icon: Trophy },
+    { id: 'legends', name: 'Legends', icon: Trophy },
     { id: 'players', name: 'Players', icon: Star },
-    { id: 'points', name: 'Points Table', icon: Award },
+    { id: 'points', name: 'Standings', icon: Award },
     { id: 'schedule', name: 'Schedule', icon: Calendar },
     { id: 'historical', name: 'History', icon: History },
     { id: 'accuracy', name: 'MLOps', icon: ShieldAlert },
@@ -113,7 +113,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
               onClick={() => setActivePage('settings')}
               className="flex items-center space-x-2 text-right hidden sm:flex cursor-pointer group"
             >
-              <div className="flex flex-col">
+              <div className="hidden 2xl:flex flex-col">
                 <span className="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-500 dark:group-hover:text-emerald-400 transition-colors">{username}</span>
                 <span className="text-[9px] font-black text-indigo-500 dark:text-cyan-400 uppercase tracking-wider">{role}</span>
               </div>
