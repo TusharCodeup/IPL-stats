@@ -45,13 +45,13 @@ const Navbar = memo(({ activePage, setActivePage }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Brand */}
-          <div className="flex items-center space-x-3">
-            <span className="text-2xl">🏏</span>
+          <div className="flex items-center space-x-3 shrink-0">
+            <span className="text-2xl drop-shadow-md">🏏</span>
             <div className="flex flex-col">
-              <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500 dark:from-emerald-400 dark:to-cyan-500 font-sans tracking-wide">
+              <span className="font-extrabold text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500 dark:from-emerald-400 dark:to-cyan-500 font-sans tracking-wide whitespace-nowrap leading-tight">
                 IPL CRIC-AI
               </span>
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">
+              <span className="text-[9px] md:text-[10px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase whitespace-nowrap leading-tight">
                 Predictive Analytics
               </span>
             </div>

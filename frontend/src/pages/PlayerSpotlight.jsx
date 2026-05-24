@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Trophy, Crosshair, Star, BarChart3, X, ArrowLeftRight } from 'lucide-react';
 import FadeIn from '../components/animations/FadeIn';
 import { iplPlayers } from '../data/iplLegends';
+import { iplSquads } from '../data/iplSquads';
 
 const roles = ['All', 'Batsman', 'Bowler', 'All-rounder', 'WK-Batsman'];
 const MAX_RUNS = 8661;
@@ -32,13 +33,38 @@ const PlayerSpotlight = () => {
   const [compare, setCompare] = useState([]); // [player1, player2]
   const [showCompare, setShowCompare] = useState(false);
 
+  const allPlayers = useMemo(() => {
+    const merged = [...iplPlayers];
+    if (typeof iplSquads !== 'undefined') {
+      iplSquads.forEach(sq => {
+        if (!merged.find(p => p.name === sq.name)) {
+          merged.push({
+            role: sq.role || 'Player',
+            emoji: '🏏',
+            runs: sq.runs ?? 0,
+            wickets: sq.wickets ?? 0,
+            matches: sq.matches ?? 0,
+            sixes: sq.sixes ?? 0,
+            fifties: sq.fifties ?? 0,
+            hundreds: sq.hundreds ?? 0,
+            highest_score: sq.highest_score ?? 0,
+            best_bowling: sq.best_bowling || 'N/A',
+            ...sq,
+          });
+        }
+      });
+    }
+    return merged;
+  }, []);
+
   const filtered = useMemo(() => {
-    return iplPlayers.filter(p => {
+    return allPlayers.filter(p => {
       const matchName = p.name.toLowerCase().includes(search.toLowerCase());
       const matchRole = roleFilter === 'All' || p.role === roleFilter;
-      return matchName && matchRole;
+      const matchTeam = search.length <= 4 && p.team && p.team.toLowerCase().includes(search.toLowerCase());
+      return (matchName || matchTeam) && matchRole;
     });
-  }, [search, roleFilter]);
+  }, [search, roleFilter, allPlayers]);
 
   const toggleCompare = (player) => {
     setCompare(prev => {

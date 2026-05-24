@@ -86,8 +86,8 @@ const Settings = () => {
   const loadPendingPayments = async () => {
     setPendingLoading(true);
     try {
-      const data = await adminService.getPendingPayments();
-      setPendingPayments(data);
+      const response = await adminService.getPendingPayments();
+      setPendingPayments(response.data);
     } catch (err) {
       console.error('Failed to load pending payments:', err);
     } finally {

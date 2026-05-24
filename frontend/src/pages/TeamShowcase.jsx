@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, MapPin, Users, Swords, ChevronDown, Crown, Target } from 'lucide-react';
 import FadeIn from '../components/animations/FadeIn';
 import { iplTeams } from '../data/iplTeams';
+import { iplSquads } from '../data/iplSquads';
 
 const TeamShowcase = () => {
   const [expandedTeam, setExpandedTeam] = useState(null);
@@ -70,18 +71,16 @@ const TeamShowcase = () => {
                     </div>
                     <div className="flex flex-col items-end shrink-0 text-right min-w-[100px]">
                       {team.titles > 0 ? (
-                        <div className="flex items-center justify-end gap-1 mb-1">
-                          {Array.from({ length: Math.min(team.titles, 5) }).map((_, idx) => (
-                            <Trophy key={idx} className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <div className="flex flex-wrap items-center justify-end gap-x-2 gap-y-2">
+                          {team.titleYears.map((year, idx) => (
+                            <div key={idx} className="flex flex-col items-center">
+                              <Trophy className="w-3.5 h-3.5 text-amber-500 mb-0.5" />
+                              <span className="text-[10px] font-semibold text-slate-500 dark:text-gray-400 leading-none">{year}</span>
+                            </div>
                           ))}
                         </div>
                       ) : (
                         <span className="text-[9px] text-gray-400 dark:text-gray-500 font-bold bg-slate-100 dark:bg-gray-800/60 px-2 py-0.5 rounded-md">No titles yet</span>
-                      )}
-                      {team.titles > 0 && (
-                        <span className="text-[10px] font-semibold text-slate-500 dark:text-gray-400 leading-tight block max-w-[120px] break-words">
-                          {team.titleYears.join(', ')}
-                        </span>
                       )}
                     </div>
                   </div>
@@ -136,17 +135,34 @@ const TeamShowcase = () => {
                         className="overflow-hidden"
                       >
                         <div className="mt-4 pt-4 border-t border-slate-100 dark:border-gray-800 space-y-4">
-                          {/* Key Players */}
+                          {/* Full Squad Showcase */}
                           <div>
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-1">
-                              <Target className="w-3 h-3" /> Key Players
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3 flex items-center gap-1">
+                              <Target className="w-3 h-3" /> Full 2024 Squad
                             </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {team.keyPlayers.map(p => (
-                                <span key={p} className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300">
-                                  {p}
-                                </span>
-                              ))}
+                            <div className="flex overflow-x-auto pb-4 gap-3 hide-scrollbar">
+                              {iplSquads && iplSquads.filter(p => p.team === team.short).length > 0 ? (
+                                iplSquads.filter(p => p.team === team.short).map((player, idx) => (
+                                  <div key={idx} className="flex-shrink-0 w-24 flex flex-col items-center">
+                                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 bg-slate-100 dark:bg-gray-800 shadow-sm mb-2" style={{ borderColor: team.borderColor.replace('border-', '') }}>
+                                      {player.image ? (
+                                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" 
+                                        onError={(e) => {
+                                          e.target.style.display = 'none';
+                                          e.target.parentElement.innerHTML = `<span class="text-2xl flex items-center justify-center h-full">🏏</span>`;
+                                        }} />
+                                      ) : (
+                                        <span className="text-2xl flex items-center justify-center h-full">🏏</span>
+                                      )}
+                                    </div>
+                                    <span className="text-[10px] text-center font-bold text-slate-800 dark:text-gray-200 leading-tight">
+                                      {player.name}
+                                    </span>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="text-xs text-gray-500 italic px-2">Squad data syncing...</div>
+                              )}
                             </div>
                           </div>
 

@@ -23,12 +23,13 @@ const PointsTable = lazy(() => import('./pages/PointsTable'));
 const MatchSchedule = lazy(() => import('./pages/MatchSchedule'));
 
 function App() {
-  const { isLoggedIn } = useAuthStore();
+  const token = useAuthStore((state) => state.token);
+  const isLoggedIn = !!token;
   const [anonymousView, setAnonymousView] = useState('landing'); // 'landing', 'login', 'register'
   const [activePage, setActivePage] = useState('dashboard'); // 'dashboard', 'live', 'analytics', 'historical', 'accuracy', 'settings'
 
   // 1. Session check for anonymous users
-  if (!isLoggedIn()) {
+  if (!isLoggedIn) {
     if (anonymousView === 'landing') {
       return (
         <ErrorBoundary>

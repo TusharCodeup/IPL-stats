@@ -38,6 +38,7 @@ const IPLLegends = () => {
         </div>
       </FadeIn>
 
+
       {/* Search Input */}
       <FadeIn delay={0.05}>
         <div className="max-w-md mx-auto mb-6 relative">
