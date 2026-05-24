@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import useAuthStore from '../store/authStore';
 import { useTheme } from '../context/ThemeContext';
 import { 
@@ -11,24 +11,38 @@ import {
   User,
   Sun,
   Moon,
-  Settings
+  Settings,
+  Trophy,
+  Users,
+  Star,
+  Menu,
+  X,
+  Award,
+  Calendar
 } from 'lucide-react';
 
 const Navbar = memo(({ activePage, setActivePage }) => {
   const { username, role, logout, credits, subscription } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
-    { id: 'live', name: 'Live Simulator', icon: Tv2 },
-    { id: 'analytics', name: 'Team Analytics', icon: BarChart3 },
-    { id: 'historical', name: 'Historical Insights', icon: History },
-    { id: 'accuracy', name: 'Model & MLOps', icon: ShieldAlert },
+    { id: 'live', name: 'Live Sim', icon: Tv2 },
+    { id: 'analytics', name: 'Analytics', icon: BarChart3 },
+    { id: 'legends', name: 'IPL Legends', icon: Trophy },
+    { id: 'teams', name: 'Teams', icon: Users },
+    { id: 'players', name: 'Players', icon: Star },
+    { id: 'points', name: 'Points Table', icon: Award },
+    { id: 'schedule', name: 'Schedule', icon: Calendar },
+    { id: 'historical', name: 'History', icon: History },
+    { id: 'accuracy', name: 'MLOps', icon: ShieldAlert },
   ];
 
   return (
-    <nav className="border-b border-slate-200/80 dark:border-gray-800/80 bg-white/80 dark:bg-[#0e1322]/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <>
+      <nav className="border-b border-slate-200/80 dark:border-gray-800/80 bg-white/80 dark:bg-[#0e1322]/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Brand */}
           <div className="flex items-center space-x-3">
@@ -43,8 +57,8 @@ const Navbar = memo(({ activePage, setActivePage }) => {
             </div>
           </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex space-x-1">
+          {/* Desktop Navigation Links */}
+          <div className="hidden xl:flex space-x-0.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activePage === item.id;
@@ -52,18 +66,26 @@ const Navbar = memo(({ activePage, setActivePage }) => {
                 <button
                   key={item.id}
                   onClick={() => setActivePage(item.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 border cursor-pointer ${
                     isActive
-                      ? 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/25 glow-brand dark:glow-green'
+                      ? 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/25'
                       : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 dark:hover:text-gray-200 border-transparent'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                   <span>{item.name}</span>
                 </button>
               );
             })}
           </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="xl:hidden p-2.5 rounded-xl border border-slate-200 dark:border-gray-800 text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
 
           {/* User Profile / theme / Logout */}
           <div className="flex items-center space-x-3">
@@ -124,11 +146,43 @@ const Navbar = memo(({ activePage, setActivePage }) => {
         </div>
       </div>
     </nav>
+
+      {/* Mobile slide-down menu */}
+      {mobileOpen && (
+        <div className="xl:hidden fixed inset-x-0 top-16 z-40 bg-white/95 dark:bg-[#0e1322]/95 backdrop-blur-xl border-b border-slate-200 dark:border-gray-800 shadow-xl animate-slide-down">
+          <div className="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 gap-2">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activePage === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => { setActivePage(item.id); setMobileOpen(false); }}
+                  className={`flex items-center space-x-2 px-3 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-indigo-500/10 text-indigo-600 dark:bg-emerald-500/10 dark:text-emerald-400'
+                      : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800/50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.name}</span>
+                </button>
+              );
+            })}
+            <button
+              onClick={() => { setActivePage('settings'); setMobileOpen(false); }}
+              className="flex items-center space-x-2 px-3 py-3 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800/50 cursor-pointer"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Settings</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 });
 
 Navbar.displayName = 'Navbar';
 
 export default Navbar;
-
-

@@ -16,6 +16,11 @@ const Historical = lazy(() => import('./pages/Historical'));
 const ModelAccuracy = lazy(() => import('./pages/ModelAccuracy'));
 const Landing = lazy(() => import('./pages/Landing'));
 const Settings = lazy(() => import('./pages/Settings'));
+const IPLLegends = lazy(() => import('./pages/IPLLegends'));
+const TeamShowcase = lazy(() => import('./pages/TeamShowcase'));
+const PlayerSpotlight = lazy(() => import('./pages/PlayerSpotlight'));
+const PointsTable = lazy(() => import('./pages/PointsTable'));
+const MatchSchedule = lazy(() => import('./pages/MatchSchedule'));
 
 function App() {
   const { isLoggedIn } = useAuthStore();
@@ -107,6 +112,16 @@ function App() {
         return <LiveSimulator />;
       case 'analytics':
         return <TeamAnalytics />;
+      case 'legends':
+        return <IPLLegends />;
+      case 'teams':
+        return <TeamShowcase />;
+      case 'players':
+        return <PlayerSpotlight />;
+      case 'points':
+        return <PointsTable />;
+      case 'schedule':
+        return <MatchSchedule />;
       case 'historical':
         return <Historical />;
       case 'accuracy':

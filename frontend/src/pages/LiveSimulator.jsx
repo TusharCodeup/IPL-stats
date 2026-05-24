@@ -50,6 +50,7 @@ const LiveSimulator = () => {
   // Local stats state
   const [scorecard, setScorecard] = useState(null);
   const [chartData, setChartData] = useState([]);
+  const [recentBalls, setRecentBalls] = useState([]);
   
   const { execute: executeStats } = useApi();
   const { data: socketData, status: socketStatus, connect: socketConnect, disconnect: socketDisconnect } = useWebSocket(config.wsUrl);
@@ -81,6 +82,21 @@ const LiveSimulator = () => {
         }
       ]);
 
+      // Append last ball to recent balls
+      if (socketData.last_ball_event) {
+        setRecentBalls((prev) => {
+          const ballId = `${socketData.balls_bowled}-${socketData.last_ball_event}`;
+          if (prev.find(b => b.id === ballId)) return prev;
+          
+          const newBall = {
+            id: ballId,
+            event: socketData.last_ball_event,
+            num: socketData.balls_bowled
+          };
+          return [...prev, newBall].slice(-12);
+        });
+      }
+
       // Automatic stop when match terminates
       if (socketData.wickets_left <= 0 || socketData.runs_needed <= 0 || socketData.balls_left <= 0) {
         console.log('[Simulator]: Match terminated naturally.');
@@ -107,6 +123,7 @@ const LiveSimulator = () => {
 
     setScorecard(null);
     setChartData([]);
+    setRecentBalls([]);
 
     const configPayload = {
       token,
@@ -376,8 +393,8 @@ const LiveSimulator = () => {
                   </span>
                 </div>
 
-                {/* Last Ball Callout */}
-                <div className="col-span-2 md:col-span-4 bg-slate-100 dark:bg-gray-950/80 p-4 rounded-2xl border border-slate-200 dark:border-gray-800 flex items-center justify-between shadow-md transition-colors">
+                {/* Last Ball Callout & Recent Balls Feed */}
+                <div className="col-span-2 md:col-span-4 bg-slate-100 dark:bg-gray-950/80 p-4 rounded-2xl border border-slate-200 dark:border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md transition-colors">
                   <div className="flex items-center space-x-2 text-sm text-slate-700 dark:text-gray-300">
                     <ChevronRight className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
                     <span className="font-bold">Last Delivery:</span>
@@ -387,6 +404,39 @@ const LiveSimulator = () => {
                         : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                     }`}>{scorecard.last_ball_event}</span>
                   </div>
+
+                  {/* Recent Balls Bar */}
+                  {recentBalls.length > 0 && (
+                    <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-1">
+                      <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider mr-1">This Over:</span>
+                      {recentBalls.map((ball) => {
+                        const isWicket = ball.event.includes('Wicket');
+                        const isSix = ball.event.includes('6');
+                        const isFour = ball.event.includes('4');
+                        const isDot = ball.event.includes('0 runs') || ball.event.includes('dot');
+                        return (
+                          <div
+                            key={ball.id}
+                            className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border flex-shrink-0 select-none ${
+                              isWicket
+                                ? 'bg-red-500 text-white border-red-650'
+                                : isSix
+                                ? 'bg-purple-600 text-white border-purple-750'
+                                : isFour
+                                ? 'bg-blue-500 text-white border-blue-650'
+                                : isDot
+                                ? 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-350 dark:border-gray-700'
+                                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                            }`}
+                            title={`Ball ${formatOvers(ball.num)}: ${ball.event}`}
+                          >
+                            {isWicket ? 'W' : isSix ? '6' : isFour ? '4' : isDot ? '.' : ball.event.split(' ')[0]}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
                   <div className="text-xs font-bold text-gray-500">
                     AI Probability: {Math.round(scorecard.batting_prob * 100)}% Win Chance
                   </div>
@@ -408,6 +458,34 @@ const LiveSimulator = () => {
                 <span className="text-xs text-gray-500 font-medium">Model: {scorecard.model_used}</span>
               )}
             </h3>
+            
+            {/* Blended Win Probability Bar */}
+            {scorecard && (
+              <div className="mb-6 p-4 bg-slate-50 dark:bg-gray-950 rounded-2xl border border-slate-200/50 dark:border-gray-900/30 transition-all">
+                <div className="flex justify-between items-center text-xs font-black mb-2">
+                  <span className="text-indigo-600 dark:text-emerald-400">
+                    🏏 {scorecard.batting_team}: {Math.round(scorecard.batting_prob * 100)}%
+                  </span>
+                  <span className="text-cyan-550">
+                    🎳 {scorecard.bowling_team}: {Math.round(scorecard.bowling_prob * 100)}%
+                  </span>
+                </div>
+                <div className="relative h-4.5 w-full bg-slate-200 dark:bg-gray-900 rounded-full overflow-hidden flex border border-slate-300/40 dark:border-gray-800 shadow-inner">
+                  <motion.div 
+                    initial={{ width: '50%' }}
+                    animate={{ width: `${scorecard.batting_prob * 100}%` }}
+                    transition={{ type: 'spring', stiffness: 80, damping: 15 }}
+                    className="h-full bg-gradient-to-r from-indigo-500 to-cyan-500 dark:from-emerald-500 dark:to-cyan-400"
+                  />
+                  <motion.div 
+                    initial={{ width: '50%' }}
+                    animate={{ width: `${scorecard.bowling_prob * 100}%` }}
+                    transition={{ type: 'spring', stiffness: 80, damping: 15 }}
+                    className="h-full bg-gradient-to-r from-cyan-600 to-indigo-650 dark:from-cyan-600 dark:to-indigo-800 ml-auto"
+                  />
+                </div>
+              </div>
+            )}
             
             {chartData.length === 0 ? (
               <div className="h-64 flex items-center justify-center text-sm text-gray-500 dark:text-gray-600 italic">

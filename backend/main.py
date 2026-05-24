@@ -3,10 +3,10 @@ from logging.handlers import RotatingFileHandler
 import time
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from .app.core.config import settings
-from .app.database.connection import engine, Base
-from .app.api.router import api_router
-from .app.api import websocket as ws_router
+from app.core.config import settings
+from app.database.connection import engine, Base
+from app.api.router import api_router
+from app.api import websocket as ws_router
 
 # 1. Setup Logging
 log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -39,14 +39,14 @@ logger = logging.getLogger("app")
 try:
     logger.info("Initializing database tables...")
     # Import models to ensure they register on Base
-    from .app.database import models
+    from app.database import models
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables initialized successfully.")
     
     # Auto-seed default admin user if database is clean
-    from .app.database.connection import SessionLocal
-    from .app.database import crud
-    from .app.core import security
+    from app.database.connection import SessionLocal
+    from app.database import crud
+    from app.core import security
     
     db = SessionLocal()
     try:

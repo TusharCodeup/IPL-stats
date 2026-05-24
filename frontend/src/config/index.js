@@ -1,7 +1,7 @@
 const config = {
   development: {
-    apiUrl: 'http://localhost:8000/api/v1',
-    wsUrl: 'ws://localhost:8000/api/ws/live-simulation',
+    apiUrl: 'http://127.0.0.1:8000/api/v1',
+    wsUrl: 'ws://127.0.0.1:8000/api/ws/live-simulation',
     logLevel: 'debug',
   },
   staging: {
@@ -16,5 +16,5 @@ const config = {
   },
 };
 
-const env = import.meta.env.VITE_APP_ENV || 'development';
+const env = import.meta.env.VITE_APP_ENV || (import.meta.env.MODE === 'production' ? 'production' : 'development');
 export default config[env] || config.development;
