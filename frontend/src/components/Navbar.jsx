@@ -31,6 +31,7 @@ const Navbar = memo(({ activePage, setActivePage }) => {
     { id: 'live', name: 'Live', icon: Tv2 },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'legends', name: 'Legends', icon: Trophy },
+    { id: 'teams', name: 'Teams', icon: Users },
     { id: 'players', name: 'Players', icon: Star },
     { id: 'points', name: 'Standings', icon: Award },
     { id: 'schedule', name: 'Schedule', icon: Calendar },
